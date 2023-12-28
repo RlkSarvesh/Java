@@ -1,0 +1,41 @@
+class BankAccount {
+    private int accountId;
+    private String accountName;
+    private double accountBalance;
+
+    public BankAccount(int id, String name, double balance) {
+        accountId = id;
+        accountName = name;
+        accountBalance = balance;
+    }
+
+    public void transferTo(BankAccount recipient, double amount) {
+        if (amount > 0 && amount <= accountBalance) {
+            accountBalance -= amount;
+            recipient.accountBalance += amount;
+            printReceipt();
+            recipient.printReceipt();
+        } else {
+            System.out.println("Invalid transfer amount or insufficient funds.");
+        }
+    }
+
+    public void printReceipt() {
+        System.out.println("Account id: " + accountId + ",");
+        System.out.println("Name: " + accountName + ",");
+        System.out.println("Account Balance: Rs." + accountBalance + "\n");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        BankAccount accountA = new BankAccount(12344, "Account A", 5000);
+        BankAccount accountB = new BankAccount(56789, "Account B", 2500);
+
+        // Transfer 1500 from Account A to B
+        accountA.transferTo(accountB, 1500);
+
+        // Transfer 3000 from Account B to A
+        accountB.transferTo(accountA, 3000);
+    }
+}
