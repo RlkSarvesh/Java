@@ -1,0 +1,52 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class PositiveNumberExceptionDemo {
+
+    public static void checkForPositiveNumbers(String filePath) throws PositiveNumberException, IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] numbers = line.split("\\s+");
+                for (String numberStr : numbers) {
+                    int number = Integer.parseInt(numberStr);
+                    if (number > 0) {
+                        throw new PositiveNumberException("Positive number found: " + number);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        String filePath = "test.txt"; // Change this to the actual file path
+
+        try {
+            checkForPositiveNumbers(filePath);
+            System.out.println("No positive numbers found in the file.");
+        } catch (PositiveNumberException e) {
+            System.out.println("Content of " + filePath + ": " + getFileContent(filePath));
+            System.out.println("Error: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("Error reading the file: " + e.getMessage());
+        }
+    }
+
+    private static String getFileContent(String filePath) throws IOException {
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append(" ");
+            }
+        }
+        return content.toString().trim();
+    }
+}
+
+class PositiveNumberException extends Exception {
+    public PositiveNumberException(String message) {
+        super(message);
+    }
+}
